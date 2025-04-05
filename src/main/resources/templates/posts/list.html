@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Zapytań</title>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #ffb400;
+            color: #333;
+            line-height: 1.6;
+        }
+
+
+
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+            margin: 0 auto;
+
+        }
+
+
+        .sidebar, .rightbar {
+            width: 300px;
+            background-color: #2d2d2d;
+            color: white;
+            padding: 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+
+            background-image: url('/images/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+        }
+
+        .rightbar {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .rightbar div, .rightbar p {
+            margin-bottom: 15px;
+        }
+
+        .rightbar button {
+            margin-bottom: 10px;
+        }
+
+        .rightbar p {
+            font-size: 0.8em ;
+        }
+
+        .sidebar h2, .rightbar h2 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul, .rightbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar li, .rightbar li {
+            background-color: #444;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar a, .rightbar a {
+            text-decoration: none;
+            color: white;
+            font-size: 1em;
+            display: block;
+        }
+
+        .sidebar button, .rightbar button {
+            padding: 10px 15px;
+            background-color: #ffb400;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            color: white;
+            width: 100%;
+        }
+
+        .sidebar button:hover, .rightbar button:hover {
+            background-color: #e69500;
+        }
+
+
+        .main-content {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        header .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header .logo h1 {
+            font-size: 2.5em;
+            color: #444;
+        }
+
+        header .stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2em;
+            color: #444;
+        }
+
+        header .stats strong {
+            font-weight: bold;
+        }
+
+        header .user-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        header .user-actions button {
+            padding: 10px 20px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        header .user-actions button:hover {
+            background-color: #444;
+        }
+
+        .search-form {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .search-form input {
+            padding: 10px;
+            width: 90%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-form button {
+            padding: 15px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background-color: #444;
+        }
+
+
+        .posts {
+            margin-top: 30px;
+        }
+
+        .posts h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .posts ul {
+            list-style: none;
+        }
+
+        .posts li {
+            position: relative;
+            background-color: #fafafa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .icon-right {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100px;
+            height: 100px;
+        }
+
+        .posts h3 {
+            font-size: 1.8em;
+            color: #444;
+        }
+
+        .posts p {
+            font-size: 1em;
+            color: #666;
+        }
+
+        .posts a {
+            text-decoration: none;
+            color: #444;
+            font-weight: bold;
+        }
+
+        .posts a:hover {
+            text-decoration: underline;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            font-size: 1.1em;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            color: #444;
+            font-weight: bold;
+        }
+
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+
+        .pagination span {
+            color: #444;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-color: #ffb400;
+
+            background-image: url('/images/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        footer button {
+            padding: 10px 20px;
+            border: 4px solid #ffb400;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        footer button:hover {
+            background-color: #e69500;
+        }
+
+        footer p {
+            font-size: 0.8em;
+            color: #bbb;
+            margin-top: 10px;
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="container">
+
+    <aside class="sidebar">
+        <h2>Popularne pytania ::</h2>
+        <ul>
+            <th:block th:each="post : ${popularPosts}">
+                <li>
+                    <a th:href="@{/posts/{postId}(postId=${post.id})}" th:text="${post.title}"></a>
+                    <button th:onclick="'window.location.href=\'/posts/' + ${post.id} + '\''">Zobacz</button>
+                </li>
+            </th:block>
+        </ul>
+    </aside>
+
+
+    <main class="main-content">
+        <header>
+            <div class="logo">
+                <a th:href="@{/posts}">
+                    <img th:src="@{/images/logo.png}" alt="Quick Question Logo" style="max-width: 50%; height: auto;">
+                </a>
+            </div>
+            <div class="stats">
+                <p>W naszym serwisie znajdziesz już <strong th:text="${totalQuestions}">#</strong> pytań!</p>
+                <p>Nasza społeczność udzieliła już <strong th:text="${totalAnswers}">#</strong> odpowiedzi!</p>
+            </div>
+
+            <form class="search-form" action="/posts" method="get">
+                <input type="text" name="search" placeholder="Szukana fraza" th:value="${search}">
+                <button type="submit">Szukaj</button>
+            </form>
+        </header>
+
+
+        <section class="posts">
+            <h2>Wyniki wyszukiwania</h2>
+            <ul>
+                <th:block th:each="post : ${posts}">
+                    <li>
+                        <h3 th:text="${post.title}"></h3>
+                        <p>
+                            <strong>Autor:
+                                <span th:text="${post.author.username}"></span>
+                                <span th:if="${post.author != null && !post.author.isVisible}" class="badge badge-danger">[Zablokowany]</span>
+                            </strong>
+                        </p>
+                        <p><strong>Data dodania:</strong> <span th:text="${#temporals.format(post.dateCreated, 'dd-MM-yyyy HH:mm')}"></span></p>
+                        <p><strong>Liczba odpowiedzi:</strong> <span th:text="${post.answerCount}"></span></p>
+                        <a th:href="@{/posts/{postId}(postId=${post.id})}">Zobacz więcej</a>
+
+                        <div class="logo">
+                            <a th:href="@{/posts/{postId}(postId=${post.id})}">
+                                <img src="/images/ico.png" alt="Ikona" class="icon-right">
+                            </a>
+                        </div>
+                    </li>
+                </th:block>
+
+                <div th:if="${#lists.isEmpty(posts)}">
+                    <p style="color: red;">Brak wyników dla wyszukiwanego zapytania.</p>
+                </div>
+            </ul>
+        </section>
+
+
+        <div th:if="${totalPages > 1}" class="pagination">
+            <span>Strona <span th:text="${currentPage + 1}"></span> z <span th:text="${totalPages}"></span></span>
+            <div>
+                <a th:if="${currentPage > 0}" th:href="@{/posts(search=${search}, page=${currentPage - 1})}">Poprzednia</a>
+                <a th:if="${currentPage < totalPages - 1}" th:href="@{/posts(search=${search}, page=${currentPage + 1})}">Następna</a>
+            </div>
+        </div>
+    </main>
+
+
+    <aside class="rightbar">
+        <div th:if="${#authentication.principal != 'anonymousUser'}">
+            <button onclick="location.href='/user/profile'">Moje konto</button>
+            <button onclick="location.href='/posts/add'">Dodaj pytanie</button>
+            <button onclick="location.href='/logout'">Wyloguj się</button>
+        </div>
+
+        <div th:if="${#authentication.principal == 'anonymousUser'}">
+            <p style="color: red;">Zaloguj się, aby używać strony w pełni.</p>
+            <button onclick="location.href='/login'">Zaloguj się</button>
+            <button onclick="location.href='/register'">Zarejestruj się</button>
+        </div>
+
+        <div th:if="${#authentication.principal == 'anonymousUser'}">
+        <p>Zalogowano jako: Guest</p>
+        </div>
+
+        <div th:if="${#authentication.principal != 'anonymousUser'}">
+            <p>Zalogowano jako: <span th:text="${user.getUsername()}"></span></p>
+        </div>
+        <p>Aktualnie zalogowanych użytkowników: <span th:text="${loggedUsers}"></span></p>
+
+        <p style="background-color: #444; color: white; font-size: 0.9em; margin-top: 30px; padding: 5px; border-radius: 5px;">
+            Quick Question to platforma, która umożliwia użytkownikom zadawanie pytań i udzielanie odpowiedzi w różnych dziedzinach. Dołącz do naszej społeczności, aby pomóc innym i uzyskać odpowiedzi na interesujące Cię pytania!
+        </p>
+    </aside>
+</div>
+<footer>
+    <p>© 2025 Autor: Rafał Wilk</p>
+</footer>
+</body>
+</html>

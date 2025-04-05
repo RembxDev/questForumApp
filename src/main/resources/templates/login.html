@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #f9f9f9;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #e69500;
+            background-color: #fff;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ffb400;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #e69500;
+        }
+
+        .error-message {
+            text-align: center;
+            margin-top: 20px;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 4px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #ffb400;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .login-options, .back-to-home {
+            font-size: 1em;
+            color: #555;
+            text-align: center;
+        }
+
+        .login-options a, .back-to-home a {
+            color: #ffb400;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<form th:action="@{/login}" method="post">
+
+    <div class="logo">
+        <a th:href="@{/posts}">
+            <img th:src="@{/images/logo.png}" alt="Quick Question Logo" style="max-width: 100%; height: auto;">
+        </a>
+    </div>
+
+    <label for="username">Nazwa użytkownika:</label>
+    <input type="text" id="username" name="username" required />
+
+    <label for="password">Hasło:</label>
+    <input type="password" id="password" name="password" required />
+
+    <button type="submit">Zaloguj się</button>
+
+    <div th:if="${errorMessage != null}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <p class="login-options">Nie masz konta? <a th:href="@{/register}">Zarejestruj się</a></p>
+
+    <p class="back-to-home"><a th:href="@{/posts}">Strona główna</a></p>
+</form>
+
+<div th:if="${param.success}">
+    <p style="color: green;">Rejestracja zakończona sukcesem! Teraz możesz się zalogować.</p>
+</div>
+
+</body>
+</html>

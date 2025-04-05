@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil użytkownika</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+        }
+
+        .accordion {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .active, .accordion:hover {
+            background-color: #ccc;
+        }
+
+        .panel {
+            padding: 0 18px;
+            display: none;
+            background-color: #f9f9f9;
+            overflow: hidden;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+
+        .panel ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .panel li {
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        .post-container, .answer-container {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .post-container {
+            background-color: #e6f7ff;
+        }
+
+        .answer-container {
+            background-color: #fff2e6;
+            border-left: 4px solid #ff7f50;
+        }
+
+        .source-info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+
+        .role-select, .btn, .block-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .role-select {
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .block-btn {
+            background-color: #ff4d4d;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .block-btn:hover {
+            background-color: #e60000;
+        }
+
+
+        .user-info {
+            margin-bottom: 10px;
+        }
+
+        .user-username {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .user-role, .user-status {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-actions form {
+            margin-right: 10px;
+        }
+
+
+        .logout-button {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .logout-button:hover {
+            background-color: #e60000;
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                justify-content: flex-start;
+                align-items: flex-start;
+            }
+
+            .container {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .accordion {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .panel {
+                padding: 10px;
+            }
+
+            .user-actions {
+                flex-direction: column;
+            }
+
+            .user-actions form {
+                margin-bottom: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Witaj, <span th:text="${user.username}"></span>!</h1>
+
+    <h3>Moje dane</h3>
+    <button class="accordion">Rozwiń/zwij dane użytkownika</button>
+    <div class="panel">
+        <p><strong>Nazwa:</strong> <span th:text="${user.username}">Username</span></p>
+        <p><strong>Rola:</strong> <span th:text="${user.role}">Role</span></p>
+    </div>
+
+    <h3>Moje pytania</h3>
+    <button class="accordion">Rozwiń/zwij pytania</button>
+    <div class="panel">
+        <ul>
+            <li th:each="post : ${posts}">
+                <div class="post-container">
+                    <p><strong>Tytuł:</strong> <span th:text="${post.title}">Tytuł postu</span></p>
+                    <p><strong>Treść:</strong> <span th:text="${post.content}">Treść postu</span></p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <h3>Moje odpowiedzi</h3>
+    <button class="accordion">Rozwiń/zwij odpowiedzi</button>
+    <div class="panel">
+        <ul>
+            <li th:each="answer : ${answers}">
+                <div class="answer-container">
+                    <p><strong>Treść odpowiedzi:</strong> <span th:text="${answer.content}">Treść odpowiedzi</span></p>
+                    <p class="source-info">Źródło: <span th:text="${answer.getPost().title}">Tytuł postu</span></p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${isAdmin}">
+        <h3>Zarządzaj użytkownikami</h3>
+        <button class="accordion">Rozwiń/zwij użytkowników</button>
+        <div class="panel">
+            <ul>
+                <li th:each="user : ${users}" class="user-item">
+                    <div class="user-info">
+                        <p class="user-username" th:text="${user.username}">Username</p>
+                        <p class="user-role" th:text="${user.role}">Rola</p>
+                        <p class="user-status" th:text="${user.isVisible ? 'Widoczny' : 'Zablokowany'}"></p>
+                    </div>
+
+                    <div class="user-actions">
+                        <form th:action="@{/user/admin/changeRole}" method="post" class="role-form">
+                            <input type="hidden" name="userId" th:value="${user.id}">
+                            <select name="newRole" class="role-select">
+                                <option value="ROLE_USER">Użytkownik</option>
+                                <option value="ROLE_ADMIN">Administrator</option>
+                            </select>
+                            <button type="submit" class="btn change-role-btn">Zmień rolę</button>
+                        </form>
+
+                        <form th:action="@{/user/admin/blockUser}" method="post" class="block-form">
+                            <input type="hidden" name="userId" th:value="${user.id}">
+                            <button type="submit" class="btn block-btn" th:text="'Zablokuj'">Zablokuj</button>
+                        </form>
+
+                        <form th:action="@{/user/admin/unblockUser}" method="post" class="unblock-form">
+                            <input type="hidden" name="userId" th:value="${user.id}">
+                            <button type="submit" class="btn unblock-btn" th:text="'Odblokuj'">Odblokuj</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-button">Wyloguj się</button>
+        </form>
+    </div>
+
+    <div>
+        <form action="/posts" method="get">
+            <button type="submit" class="btn unblock-btn">Strona Główna</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

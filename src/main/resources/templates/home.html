@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+
+    <style>
+        body.chrome {
+            background-color: lightblue;
+        }
+
+        body.firefox {
+            background-color: lightgreen;
+        }
+
+        body.safari {
+            background-color: lightcoral;
+        }
+
+        body.edge {
+            background-color: lightgoldenrodyellow;
+        }
+
+        body.opera {
+            background-color: lightpink;
+        }
+
+        body.other {
+            background-color: white;
+        }
+    </style>
+
+</head>
+<body th:classappend="${browser}">
+<header>
+    <h1>Witaj, <span th:text="${username}"></span> na stronie do zadawania pytań!</h1>
+</header>
+
+<main>
+    <p>Jest to platforma, na której możesz zadawać pytania i odpowiadać na nie. Zapraszamy!</p>
+    <p>Aktualnie zalogowanych użytkowników: <span th:text="${loggedUsers}"></span></p>
+    <p>Przeglądarka: <span th:text="${browser}"></span></p>
+
+    <div class="navigation">
+        <a th:href="@{/posts}">Przejdź do listy pytań</a>
+    </div>
+</main>
+
+<div th:if="${isLoggedIn}">
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Wyloguj się</button>
+    </form>
+</div>
+</body>
+</html>
