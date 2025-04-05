@@ -7,6 +7,7 @@ Backend:
       - Spring Security
       - Spring Web
       - Lombok
+        
 Frontend:
   - HTML (Thymeleaf)
       - CSS
